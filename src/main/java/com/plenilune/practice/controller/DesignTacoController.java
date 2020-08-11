@@ -22,10 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/design")
 public class DesignTacoController {
 
-    @GetMapping
-    public String showDesignForm(Model model) {
-
-        List<Ingredient> ingredients = Arrays.asList(
+    List<Ingredient> ingredients = Arrays.asList(
             new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
             new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
             new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
@@ -36,29 +33,22 @@ public class DesignTacoController {
             new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
             new Ingredient("SLSA", "Salsa", Type.SAUCE),
             new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
-        );
+    );
 
-        Type[] types = Ingredient.Type.values();
+    @GetMapping
+    public String showDesignForm(Model model) {
 
-        for (Ingredient.Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredients, type));
-        }
+        sortByType(model);
 
         model.addAttribute("taco", new Taco());
 
         return "design";
     }
 
-    private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
-        return ingredients
-                .stream()
-                .filter(x -> x.getType().equals(type))
-                .collect(Collectors.toList());
-    }
-
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors) {
+    public String processDesign(@Valid Taco design, Errors errors, Model model) {
+
+        sortByType(model);
 
         if (errors.hasErrors()) {
             return "design";
@@ -66,5 +56,21 @@ public class DesignTacoController {
 
         log.info("Processing design : " + design);
         return "redirect:/orders/current";
+    }
+
+    private void sortByType(Model model) {
+        Type[] types = Type.values();
+
+        for (Type type : types) {
+            model.addAttribute(type.toString().toLowerCase(),
+                    filterByType(ingredients, type));
+        }
+    }
+
+    private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
+        return ingredients
+                .stream()
+                .filter(x -> x.getType().equals(type))
+                .collect(Collectors.toList());
     }
 }
