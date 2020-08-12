@@ -1,18 +1,20 @@
 package com.plenilune.practice.controller;
 
 import com.plenilune.practice.dao.IngredientRepository;
+import com.plenilune.practice.dao.TacoRepository;
 import com.plenilune.practice.domain.Ingredient;
+import com.plenilune.practice.domain.Order;
 import com.plenilune.practice.domain.Taco;
 import com.plenilune.practice.domain.Ingredient.Type;
 
+import com.plenilune.practice.service.IngredientService;
+import com.plenilune.practice.service.TacoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -22,13 +24,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
 
-    private final IngredientRepository ingredientRepository;
+    private final IngredientService ingredientService;
+    private final TacoService tacoService;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository) {
-        this.ingredientRepository = ingredientRepository;
+    public DesignTacoController(IngredientService ingredientService,
+                                TacoService tacoService) {
+        this.ingredientService = ingredientService;
+        this.tacoService = tacoService;
     }
 
 
@@ -43,7 +49,10 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors, Model model) {
+    public String processDesign(@Valid Taco design,
+                                Errors errors,
+                                Model model,
+                                @ModelAttribute Order order) {
 
         sortByType(model);
 
@@ -51,13 +60,14 @@ public class DesignTacoController {
             return "design";
         }
 
-        log.info("Processing design : " + design);
+        Taco saved = tacoService.saveTaco(design);
+        order.addDesign(saved);
+
         return "redirect:/orders/current";
     }
 
     private void sortByType(Model model) {
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
+        List<Ingredient> ingredients = ingredientService.findAllIngredient();
 
         Type[] types = Type.values();
 
@@ -72,5 +82,15 @@ public class DesignTacoController {
                 .stream()
                 .filter(x -> x.getType().equals(type))
                 .collect(Collectors.toList());
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order() {
+        return new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco() {
+        return new Taco();
     }
 }
