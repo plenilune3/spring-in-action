@@ -51,11 +51,27 @@ public class Order implements Serializable {
 
     private Date placedAt;
 
+    @ManyToOne
+    private User user;
+
     @ManyToMany(targetEntity = Taco.class)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addDesign(Taco design) {
         this.tacos.add(design);
+    }
+
+    public void fillUpTheForm(User user) {
+        if (getDeliveryName() == null)
+            setDeliveryName(user.getFullname());
+        if (getDeliveryStreet() == null)
+            setDeliveryStreet(user.getStreet());
+        if (getDeliveryCity() == null)
+            setDeliveryCity(user.getCity());
+        if (getDeliveryState() == null)
+            setDeliveryState(user.getState());
+        if (getDeliveryZip() == null)
+            setDeliveryZip(user.getZip());
     }
 
     @PrePersist

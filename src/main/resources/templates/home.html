@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html lang="en"
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="EUC-KR">
+    <title>Taco Cloud</title>
 </head>
 <body>
-    <h1>Welcome to...</h1>
-    <img th:src="@{/images/TacoCloud.png}"/>
+<h1>Welcome to...</h1>
+<img th:src="@{/images/TacoCloud.png}"/>
+
+<td th:if="${user == null}">
+    <form method="POST" th:action="@{/login}" id="loginForm">
+        <input th:type="submit" value="Login"/>
+    </form>
+</td>
+
+<td th:unless="${user == null}">
+<form method="POST" th:action="@{/logout}" id="logoutForm">
+    <input type="submit" value="Logout"/>
+</form>
+</td>
+
+<a th:href="@{/design}" id="design">Design a taco</a>
+
 </body>
 </html>

@@ -2,13 +2,10 @@ package com.plenilune.practice.service;
 
 import com.plenilune.practice.dao.UserRepository;
 import com.plenilune.practice.domain.User;
-import com.plenilune.practice.dto.RegistrationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +28,10 @@ public class UserService implements UserDetailsService {
 
         throw new UsernameNotFoundException(
                 "User '" + username + "' not fount");
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public User userRegistration(User user) {

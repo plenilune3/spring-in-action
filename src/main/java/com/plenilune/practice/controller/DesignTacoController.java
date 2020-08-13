@@ -7,8 +7,10 @@ import com.plenilune.practice.domain.Order;
 import com.plenilune.practice.domain.Taco;
 import com.plenilune.practice.domain.Ingredient.Type;
 
+import com.plenilune.practice.domain.User;
 import com.plenilune.practice.service.IngredientService;
 import com.plenilune.practice.service.TacoService;
+import com.plenilune.practice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,19 +32,26 @@ public class DesignTacoController {
 
     private final IngredientService ingredientService;
     private final TacoService tacoService;
+    private final UserService userService;
 
     @Autowired
     public DesignTacoController(IngredientService ingredientService,
-                                TacoService tacoService) {
+                                TacoService tacoService,
+                                UserService userService) {
         this.ingredientService = ingredientService;
         this.tacoService = tacoService;
+        this.userService = userService;
     }
 
 
     @GetMapping
-    public String showDesignForm(Model model) {
+    public String showDesignForm(Model model, Principal principal) {
 
         sortByType(model);
+
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        model.addAttribute("user", user);
 
         model.addAttribute("taco", new Taco());
 
