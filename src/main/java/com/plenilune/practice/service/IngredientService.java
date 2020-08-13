@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,7 +26,7 @@ public class IngredientService {
         return ingredients;
     }
 
-    public Ingredient findById(String id) {
+    public Optional<Ingredient> findById(String id) {
         return ingredientRepository.findById(id);
     }
 
