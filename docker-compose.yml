@@ -1,0 +1,28 @@
+version: "3"
+services:
+
+    taco_database:
+        container_name: taco_database
+        image: mysql:5.7
+        environment:
+            MYSQL_DATABASE: taco_db
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_HOST: '%'
+        ports:
+            - 3306:3306
+
+    taco_application:
+        container_name: taco_application
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            MYSQL_ADDRESS: taco_database
+            MYSQL_USERNAME: root
+            MYSQL_PASSWORD: root
+        ports:
+            - 8080:8080
+        restart: always
+        depends_on:
+            - taco_database
+
