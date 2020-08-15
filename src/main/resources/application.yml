@@ -1,8 +1,12 @@
 spring:
-  h2:
-    console:
-      enabled: true  # H2 웹 콘솔을 사용하겠다는 의미
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
 
   datasource:
-    driver-class-name: org.h2.Driver  #h2 드라이버 설정
-    url: jdbc:h2:mem:testdb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_ADDRESS}:3306/taco_db?characterEncoding=UTF-8
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    initialization-mode: always
