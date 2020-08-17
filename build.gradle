@@ -1,50 +1,89 @@
-plugins {
-    id 'org.springframework.boot' version '2.3.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'java'
-}
-
-group = 'com.plenilune'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+buildscript {
+    ext {
+        springBootVersion = '2.3.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.3.2.RELEASE'
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE'
     }
 }
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    group = 'com.plenilune'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '11'
 
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'
-    implementation 'org.jetbrains:annotations:19.0.0'
-    implementation 'junit:junit:4.12'
-
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    repositories {
+        mavenCentral()
     }
-    testImplementation 'org.springframework.security:spring-security-test'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+//        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//        implementation 'org.springframework.boot:spring-boot-starter-web'
+//        implementation 'org.springframework.boot:spring-boot-starter-validation'
+//        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//        implementation 'org.springframework.boot:spring-boot-starter-security'
+//        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+//        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+//        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'
+        implementation 'org.jetbrains:annotations:19.0.0'
+        implementation 'junit:junit:4.12'
+
+        compileOnly 'org.projectlombok:lombok'
+//        runtimeOnly 'com.h2database:h2'
+//        runtimeOnly 'mysql:mysql-connector-java'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+//        testImplementation 'org.springframework.security:spring-security-test'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }
 
-test {
-    useJUnitPlatform()
+project (':taco-api') {
+    dependencies {
+        compile project(':taco-data')
+        compile project(':taco-domain')
+        compile project(':taco-security')
+    }
 }
+
+project (':taco-data') {
+    dependencies {
+        compile project(':taco-domain')
+    }
+}
+
+project (':tacos') {
+    dependencies {
+        compile project(':taco-api')
+        compile project(':taco-data')
+        compile project(':taco-domain')
+        compile project(':taco-security')
+    }
+}
+
+
+
