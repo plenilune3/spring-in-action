@@ -1,4 +1,14 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+//    implementation 'org.springframework.boot:spring-boot-starter-hateoas:'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.2.RELEASE'
+
 }

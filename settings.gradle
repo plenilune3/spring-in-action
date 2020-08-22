@@ -1,3 +1,3 @@
 rootProject.name = 'practice'
 
-include 'taco-api', 'taco-data', 'taco-domain', 'taco-security', 'tacos'
+include 'taco-api', 'taco-data', 'taco-domain', 'tacos', 'taco-security'

@@ -11,6 +11,11 @@ buildscript {
     }
 }
 
+allprojects {
+    group = 'com.plenilune'
+    version = '0.0.1-SNAPSHOT'
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
@@ -31,21 +36,10 @@ subprojects {
     }
 
     dependencies {
-//        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-//        implementation 'org.springframework.boot:spring-boot-starter-web'
-//        implementation 'org.springframework.boot:spring-boot-starter-validation'
-//        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//        implementation 'org.springframework.boot:spring-boot-starter-security'
-//        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-//        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-
-//        implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'
         implementation 'org.jetbrains:annotations:19.0.0'
         implementation 'junit:junit:4.12'
 
         compileOnly 'org.projectlombok:lombok'
-//        runtimeOnly 'com.h2database:h2'
-//        runtimeOnly 'mysql:mysql-connector-java'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -54,7 +48,6 @@ subprojects {
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
-//        testImplementation 'org.springframework.security:spring-security-test'
     }
 
     test {
@@ -62,16 +55,28 @@ subprojects {
     }
 }
 
-project (':taco-api') {
+project (':taco-domain') {
     dependencies {
-        compile project(':taco-data')
-        compile project(':taco-domain')
-        compile project(':taco-security')
+
     }
 }
 
 project (':taco-data') {
     dependencies {
+        compile project(':taco-domain')
+    }
+}
+
+project (':taco-security') {
+    dependencies {
+        compile project(':taco-domain')
+        compile project(':taco-data')
+    }
+}
+
+project (':taco-api') {
+    dependencies {
+        compile project(':taco-data')
         compile project(':taco-domain')
     }
 }
