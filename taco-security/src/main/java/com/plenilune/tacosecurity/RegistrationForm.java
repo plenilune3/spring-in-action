@@ -1,6 +1,6 @@
-package com.plenilune.practice.dto;
+package com.plenilune.tacosecurity;
 
-import com.plenilune.practice.domain.User;
+import com.plenilune.tacodomain.User;
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
