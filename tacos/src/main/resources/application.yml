@@ -1,7 +1,9 @@
 spring:
+
   profiles:
     active:
       - prod
+
   jpa:
     show-sql: true
     hibernate:
@@ -13,3 +15,4 @@ spring:
     username: root
     password: root
     initialization-mode: always
+
