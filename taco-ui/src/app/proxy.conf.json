@@ -1,0 +1,10 @@
+{
+  "/ingredientsx" : {
+    "target" : "http://taco-application:8080",
+    "secure" : false,
+    "pathRewrite" : {
+      "^/ingredientsx" : ""
+    },
+    "changeOrigin": true
+  }
+}
