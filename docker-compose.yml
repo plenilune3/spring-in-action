@@ -1,8 +1,8 @@
 version: "3"
 services:
 
-    taco_database:
-        container_name: taco_database
+    taco-database:
+        container_name: taco-database
         image: mysql:5.7
         environment:
             MYSQL_DATABASE: taco_db
@@ -11,18 +11,29 @@ services:
         ports:
             - 3306:3306
 
-    taco_application:
-        container_name: taco_application
+    taco-application:
+        container_name: taco-application
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile_springboot
         environment:
-            MYSQL_ADDRESS: taco_database
+            MYSQL_ADDRESS: taco-database
             MYSQL_USERNAME: root
             MYSQL_PASSWORD: root
         ports:
             - 8080:8080
         restart: always
         depends_on:
-            - taco_database
+            - taco-database
+
+    taco-ui:
+        container_name: taco-ui
+        build:
+            context: .
+            dockerfile: Dockerfile_angular
+        ports:
+            - 4200:4200
+        restart: always
+        depends_on:
+            - taco-application
 

@@ -1,0 +1,16 @@
+FROM node:12
+
+EXPOSE 4200
+
+WORKDIR /app
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY ./taco-ui/package*.json /app/
+
+RUN npm install
+RUN npm install -g @angular/cli
+
+COPY ./taco-ui /app
+
+ENTRYPOINT ["ng", "serve", "--host", "0.0.0.0"]
